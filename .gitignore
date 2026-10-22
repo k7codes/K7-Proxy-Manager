@@ -1,0 +1,36 @@
+# Build results
+bin/
+obj/
+out/
+publish/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.csproj.user
+
+# User-specific files
+*.db
+*.db-shm
+*.db-wal
+k7proxy.db
+
+# OS generated
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# NuGet
+*.nupkg
+packages/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp

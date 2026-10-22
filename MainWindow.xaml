@@ -1,0 +1,525 @@
+﻿<Window x:Class="k7proxyyoneticisi.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        xmlns:conv="clr-namespace:k7proxyyoneticisi.donusturuculer"
+        Title="K7 PROXY YÖNETİCİSİ" Height="900" Width="1400"
+        MinHeight="700" MinWidth="1100"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" ResizeMode="CanResize"
+        Background="{StaticResource Bg}">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="40" ResizeBorderThickness="6"
+                            GlassFrameThickness="0" CornerRadius="0"
+                            UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+    <Window.Resources>
+        <conv:boolGorunurluk x:Key="BoolGorunurluk"/>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="{StaticResource CardBg}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CardBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground" Value="{StaticResource CardBg}"/>
+            <Setter Property="AlternatingRowBackground" Value="#FF0F0F13"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource Hairline}"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="RowHeight" Value="28"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#FF0A0A0C"/>
+            <Setter Property="Foreground" Value="{StaticResource Sub}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Hairline}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF14141A"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FF2A2A33"/>
+                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Slider">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Background" Value="#1A1A22"/>
+            <Setter Property="Margin" Value="0,4,0,8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid>
+                            <Track x:Name="PART_Track">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="Slider.DecreaseLarge" Background="#FFFFFF" Height="4" BorderThickness="0" Opacity="0.8"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Width="14" Height="14">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Ellipse Fill="#FFFFFF" Stroke="#0A0A0C" StrokeThickness="2"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="Slider.IncreaseLarge" Background="#2A2A33" Height="4" BorderThickness="0"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Canvas Grid.RowSpan="2" IsHitTestVisible="False" Opacity="0.35">
+            <Ellipse Width="600" Height="600" Fill="#FFFFFF" Canvas.Left="-200" Canvas.Top="-200">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="120"/>
+                </Ellipse.Effect>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.05" To="0.18" Duration="0:0:6"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            <Ellipse Width="500" Height="500" Fill="#FFFFFF" Canvas.Left="900" Canvas.Top="400">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="100"/>
+                </Ellipse.Effect>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.04" To="0.14" Duration="0:0:8"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+        </Canvas>
+        <Grid Grid.Row="0" Background="{StaticResource Panel}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                <Ellipse x:Name="DurumDot" Width="10" Height="10" Fill="#FFFFFF" Margin="0,0,10,0">
+                    <Ellipse.Effect>
+                        <DropShadowEffect Color="#FFFFFF" BlurRadius="8" ShadowDepth="0" Opacity="0.9"/>
+                    </Ellipse.Effect>
+                    <Ellipse.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.4" To="1" Duration="0:0:1.2"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)" From="4" To="14" Duration="0:0:1.2"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Ellipse.Triggers>
+                </Ellipse>
+                <TextBlock Text="K7 PROXY YÖNETİCİSİ" Foreground="{StaticResource TextColor}" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button Style="{StaticResource CaptionButton}" Content="&#xE921;" Click="OnMinimize" ToolTip="Küçült"/>
+                <Button Style="{StaticResource CaptionButton}" Content="&#xE922;" Click="OnMaximize" ToolTip="Büyüt / Geri yükle"/>
+                <Button Style="{StaticResource CloseButton}" Content="&#xE8BB;" Click="OnClose" ToolTip="Kapat" Margin="4,0,8,0"/>
+            </StackPanel>
+        </Grid>
+        <TabControl x:Name="AnaTabs" Grid.Row="1" Margin="0" TabStripPlacement="Left" SelectionChanged="AnaTabs_SelectionChanged">
+        <!-- ANA SAYFA -->
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE80F;" Margin="0,0,10,0"/>
+                    <TextBlock Text="ANA SAYFA"/>
+                </StackPanel>
+            </TabItem.Header>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="20">
+                    <TextBlock Text="GENEL BAKIŞ" Style="{StaticResource H1}"/>
+                    <UniformGrid Columns="4" Margin="0,0,0,16">
+                        <GroupBox Header="TOPLAM PROXY" Style="{StaticResource Card}" Margin="6">
+                            <TextBlock Text="{Binding toplam}" FontSize="36" FontWeight="Black" Foreground="#FFFFFF"/>
+                        </GroupBox>
+                        <GroupBox Header="ÇALIŞAN" Style="{StaticResource Card}" Margin="6">
+                            <TextBlock Text="{Binding calisan}" FontSize="36" FontWeight="Black" Foreground="#FFFFFF"/>
+                        </GroupBox>
+                        <GroupBox Header="ÇALIŞMAYAN" Style="{StaticResource Card}" Margin="6">
+                            <TextBlock Text="{Binding calismayan}" FontSize="36" FontWeight="Black" Foreground="#FFFFFF"/>
+                        </GroupBox>
+                        <GroupBox Header="KAYNAK" Style="{StaticResource Card}" Margin="6">
+                            <TextBlock Text="{Binding kaynaklar.Count}" FontSize="36" FontWeight="Black" Foreground="#FFFFFF"/>
+                        </GroupBox>
+                    </UniformGrid>
+
+                    <TextBlock Text="HIZLI İŞLEMLER" Style="{StaticResource H1}"/>
+                    <WrapPanel Margin="0,0,0,16">
+                        <Button Content="PROXY ÇEK" Command="{Binding cekKomutu}" Margin="0,0,10,10" Width="160" Height="40" Style="{StaticResource AccentButton}"/>
+                        <Button Content="KONTROL ET" Command="{Binding kontrolKomutu}" Margin="0,0,10,10" Width="160" Height="40" Style="{StaticResource AccentButton}"/>
+                        <Button Content="KAYDET" Command="{Binding kaydetKomutu}" Margin="0,0,10,10" Width="160" Height="40"/>
+                        <Button Content="TEMİZLE" Command="{Binding temizleKomutu}" Margin="0,0,10,10" Width="160" Height="40"/>
+                    </WrapPanel>
+
+                    <ProgressBar Value="{Binding ilerleme}" Maximum="100" Height="6" Margin="0,0,0,16"/>
+
+                    <GroupBox Header="AKTİVİTE LOGU" Style="{StaticResource Card}" Margin="0,0,0,16">
+                        <ListBox ItemsSource="{Binding loglar}" Height="120" Background="Transparent" BorderThickness="0" Foreground="{StaticResource Sub}"/>
+                    </GroupBox>
+
+                    <TextBlock Text="SON PROXY'LER" Style="{StaticResource H1}"/>
+                    <GroupBox Header="PROXY LİSTESİ" Style="{StaticResource Card}">
+                        <DataGrid ItemsSource="{Binding proxyler}" AutoGenerateColumns="False" Height="320" IsReadOnly="True" CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="IP" Binding="{Binding ip}" Width="150"/>
+                                <DataGridTextColumn Header="PORT" Binding="{Binding port}" Width="70"/>
+                                <DataGridTextColumn Header="TÜR" Binding="{Binding tur}" Width="80"/>
+                                <DataGridTextColumn Header="ÜLKE" Binding="{Binding ulke}" Width="120"/>
+                                <DataGridTextColumn Header="ANONİMLİK" Binding="{Binding anonimlik}" Width="110"/>
+                                <DataGridTextColumn Header="HIZ (ms)" Binding="{Binding hiz}" Width="80"/>
+                                <DataGridTextColumn Header="DURUM" Binding="{Binding durummetni}" Width="100"/>
+                                <DataGridTextColumn Header="KAYNAK" Binding="{Binding kaynak}" Width="140"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <!-- PROXY ÇEK -->
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE896;" Margin="0,0,10,0"/>
+                    <TextBlock Text="PROXY ÇEK"/>
+                </StackPanel>
+            </TabItem.Header>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="20" MaxWidth="820">
+                    <TextBlock Text="PROXY ÇEKME" Style="{StaticResource H1}"/>
+                    <GroupBox Header="ÇEKME AYARLARI" Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="TÜR" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <ComboBox Grid.Column="1" ItemsSource="{Binding turSecenekleri}" SelectedItem="{Binding secilitur}"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="ADET" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBox Grid.Column="1" Text="{Binding istenensayi}"/>
+                            </Grid>
+                            <Slider Minimum="10" Maximum="1000" Value="{Binding istenensayi}" Margin="140,0,0,10"/>
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="PARALEL" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBox Grid.Column="1" Text="{Binding paralel}"/>
+                            </Grid>
+                            <Slider Minimum="1" Maximum="200" Value="{Binding paralel}" Margin="140,0,0,10"/>
+                            <Expander Header="GELİŞMİŞ SEÇENEKLER" Foreground="{StaticResource Sub}" Margin="0,8,0,0">
+                                <StackPanel Margin="0,8,0,0">
+                                    <TextBlock Text="Kaynaklar aktifse otomatik olarak kullanılır. Pasif kaynakları 'KAYNAKLAR' sekmesinden yönetebilirsiniz." Foreground="{StaticResource Sub}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Expander>
+                            <Button Content="ÇEKMEYİ BAŞLAT" Command="{Binding cekKomutu}" Height="40" Margin="0,0,0,12" Style="{StaticResource AccentButton}"/>
+                            <ProgressBar Value="{Binding ilerleme}" Maximum="100" Height="6" Margin="0,0,0,8"/>
+                            <TextBlock Text="{Binding durummetni}" Foreground="{StaticResource Sub}"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <TextBlock Text="AKTİF KAYNAKLAR" Style="{StaticResource H1}"/>
+                    <GroupBox Header="KAYNAK LİSTESİ" Style="{StaticResource Card}">
+                        <DataGrid ItemsSource="{Binding kaynaklar}" AutoGenerateColumns="False" Height="320" CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="AD" Binding="{Binding ad}" Width="220"/>
+                                <DataGridTextColumn Header="TÜR" Binding="{Binding tur}" Width="90"/>
+                                <DataGridTextColumn Header="ÇEKİLEN" Binding="{Binding cekilensayi}" Width="90"/>
+                                <DataGridCheckBoxColumn Header="AKTİF" Binding="{Binding aktif}" Width="70"/>
+                                <DataGridTextColumn Header="URL" Binding="{Binding url}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <!-- PROXY LİSTESİ -->
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE71D;" Margin="0,0,10,0"/>
+                    <TextBlock Text="PROXY LİSTESİ"/>
+                </StackPanel>
+            </TabItem.Header>
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="FİLTRELER" Style="{StaticResource Card}" Grid.Row="0" Margin="0,0,0,12">
+                    <WrapPanel>
+                        <TextBlock Text="TÜR:" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Bold"/>
+                        <ComboBox ItemsSource="{Binding turSecenekleri}" SelectedItem="{Binding secilitur}" Width="100" Margin="0,0,16,0"/>
+                        <TextBlock Text="ANONİMLİK:" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Bold"/>
+                        <ComboBox ItemsSource="{Binding anonimlikSecenekleri}" SelectedItem="{Binding anonimlikFiltre}" Width="120" Margin="0,0,16,0"/>
+                        <TextBlock Text="ÜLKE:" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Bold"/>
+                        <TextBox Text="{Binding ulkeFiltre}" Width="120" Margin="0,0,16,0"/>
+                        <Button Content="TÜMÜNÜ SEÇ" Command="{Binding secTumuKomutu}" Margin="0,0,8,0"/>
+                        <Button Content="SEÇİMİ TEMİZLE" Command="{Binding secTemizleKomutu}" Margin="0,0,8,0"/>
+                        <Button Content="SEÇİLENLERİ SİL" Command="{Binding secilenleriSilKomutu}"/>
+                    </WrapPanel>
+                </GroupBox>
+                <GroupBox Header="PROXY'LER" Style="{StaticResource Card}" Grid.Row="1">
+                    <DataGrid ItemsSource="{Binding proxyler}" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="IP'Yİ KOPYALA" Click="Kopyala_Click"/>
+                                <MenuItem Header="SEÇ" Click="Sec_Click"/>
+                                <MenuItem Header="SEÇİLENLERİ SİL" Command="{Binding secilenleriSilKomutu}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="SEÇ" Binding="{Binding secili}" Width="50"/>
+                            <DataGridTextColumn Header="IP" Binding="{Binding ip}" Width="150"/>
+                            <DataGridTextColumn Header="PORT" Binding="{Binding port}" Width="70"/>
+                            <DataGridTextColumn Header="TÜR" Binding="{Binding tur}" Width="80"/>
+                            <DataGridTextColumn Header="ÜLKE" Binding="{Binding ulke}" Width="120"/>
+                            <DataGridTextColumn Header="ANONİMLİK" Binding="{Binding anonimlik}" Width="110"/>
+                            <DataGridTextColumn Header="HIZ (ms)" Binding="{Binding hiz}" Width="90"/>
+                            <DataGridTextColumn Header="DURUM" Binding="{Binding durummetni}" Width="100"/>
+                            <DataGridTextColumn Header="KAYNAK" Binding="{Binding kaynak}" Width="150"/>
+                            <DataGridTextColumn Header="TARİH" Binding="{Binding tarih, StringFormat={}{0:dd.MM.yyyy HH:mm}}" Width="130"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </GroupBox>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,0,0">
+                    <Button Content="KONTROL ET" Command="{Binding kontrolKomutu}" Margin="0,0,8,0" Style="{StaticResource AccentButton}"/>
+                    <Button Content="KAYDET" Command="{Binding kaydetKomutu}" Margin="0,0,8,0"/>
+                    <Button Content="DIŞA AKTAR" Command="{Binding disaAktarKomutu}" Margin="0,0,8,0"/>
+                    <Button Content="ÇALIŞANLARI KOPYALA" Click="CalisanlariKopyala_Click" Margin="0,0,8,0"/>
+                    <TextBlock Text="{Binding toplam, StringFormat='Toplam: {0}'}" VerticalAlignment="Center" Margin="12,0,0,0" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+
+        <!-- KONTROL -->
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FB;" Margin="0,0,10,0"/>
+                    <TextBlock Text="KONTROL"/>
+                </StackPanel>
+            </TabItem.Header>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="20" MaxWidth="820">
+                    <TextBlock Text="PROXY KONTROL" Style="{StaticResource H1}"/>
+                    <GroupBox Header="KONTROL AYARLARI" Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Seçilen türdeki proxy'ler kontrol edilir. Paralel bağlantı sayısı ile hız ayarlanabilir." 
+                                       Foreground="{StaticResource Sub}" TextWrapping="Wrap" Margin="0,0,0,16"/>
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="PARALEL" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBox Grid.Column="1" Text="{Binding paralel}"/>
+                            </Grid>
+                            <Slider Minimum="1" Maximum="200" Value="{Binding paralel}" Margin="140,0,0,10"/>
+                            <Expander Header="GELİŞMİŞ SEÇENEKLER" Foreground="{StaticResource Sub}" Margin="0,8,0,0">
+                                <StackPanel Margin="0,8,0,0">
+                                    <TextBlock Text="Kaynaklar aktifse otomatik olarak kullanılır. Pasif kaynakları 'KAYNAKLAR' sekmesinden yönetebilirsiniz." Foreground="{StaticResource Sub}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Expander>
+                            <Button Content="KONTROLÜ BAŞLAT" Command="{Binding kontrolKomutu}" Height="40" Margin="0,0,0,12" Style="{StaticResource AccentButton}"/>
+                            <ProgressBar Value="{Binding ilerleme}" Maximum="100" Height="6" Margin="0,0,0,8"/>
+                            <TextBlock Text="{Binding durummetni}" Foreground="{StaticResource Sub}"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <UniformGrid Columns="3">
+                        <GroupBox Header="TOPLAM" Style="{StaticResource Card}" Margin="6">
+                            <TextBlock Text="{Binding toplam}" FontSize="34" FontWeight="Black"/>
+                        </GroupBox>
+                        <GroupBox Header="ÇALIŞAN" Style="{StaticResource Card}" Margin="6">
+                            <TextBlock Text="{Binding calisan}" FontSize="34" FontWeight="Black"/>
+                        </GroupBox>
+                        <GroupBox Header="ÇALIŞMAYAN" Style="{StaticResource Card}" Margin="6">
+                            <TextBlock Text="{Binding calismayan}" FontSize="34" FontWeight="Black"/>
+                        </GroupBox>
+                    </UniformGrid>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <!-- GRAFİKLER -->
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE9D2;" Margin="0,0,10,0"/>
+                    <TextBlock Text="GRAFİKLER"/>
+                </StackPanel>
+            </TabItem.Header>
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Content="GRAFİKLERİ GÜNCELLE" Command="{Binding grafikGuncelleKomutu}" Height="40" Margin="0,0,0,12" Style="{StaticResource AccentButton}" HorizontalAlignment="Left"/>
+                <Grid Grid.Row="1" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="TÜR DAĞILIMI" Style="{StaticResource Card}" Grid.Column="0" Margin="0,0,8,0">
+                        <lvc:CartesianChart Series="{Binding turSerisi}" XAxes="{Binding turXAxes}" Height="300"/>
+                    </GroupBox>
+                    <GroupBox Header="DURUM DAĞILIMI" Style="{StaticResource Card}" Grid.Column="1" Margin="8,0,0,0">
+                        <lvc:PieChart Series="{Binding durumSerisi}" Height="300"/>
+                    </GroupBox>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="ÜLKE DAĞILIMI (TOP 8)" Style="{StaticResource Card}" Grid.Column="0" Margin="0,8,8,0">
+                        <lvc:CartesianChart Series="{Binding ulkeSerisi}" Height="300"/>
+                    </GroupBox>
+                    <GroupBox Header="GECİKME (ms)" Style="{StaticResource Card}" Grid.Column="1" Margin="8,8,0,0">
+                        <lvc:CartesianChart Series="{Binding hizSerisi}" Height="300"/>
+                    </GroupBox>
+                </Grid>
+            </Grid>
+        </TabItem>
+
+        <!-- KAYNAKLAR -->
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE71B;" Margin="0,0,10,0"/>
+                    <TextBlock Text="KAYNAKLAR"/>
+                </StackPanel>
+            </TabItem.Header>
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="YENİ KAYNAK EKLE" Style="{StaticResource Card}" Grid.Row="0" Margin="0,0,0,16">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="AD" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBox Grid.Column="1" Text="{Binding yeniKaynakAd}"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="URL" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <TextBox Grid.Column="1" Text="{Binding yeniKaynakUrl}"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="TÜR" VerticalAlignment="Center" FontWeight="Bold"/>
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding turSecenekleri}" SelectedItem="{Binding yeniKaynakTur}"/>
+                        </Grid>
+                        <Button Content="EKLE" Command="{Binding kaynakEkleKomutu}" Width="140" HorizontalAlignment="Left" Style="{StaticResource AccentButton}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="KAYNAK LİSTESİ" Style="{StaticResource Card}" Grid.Row="1">
+                    <DataGrid ItemsSource="{Binding kaynaklar}" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="50"/>
+                            <DataGridTextColumn Header="AD" Binding="{Binding ad}" Width="200"/>
+                            <DataGridTextColumn Header="TÜR" Binding="{Binding tur}" Width="90"/>
+                            <DataGridCheckBoxColumn Header="AKTİF" Binding="{Binding aktif}" Width="70"/>
+                            <DataGridTextColumn Header="ÇEKİLEN" Binding="{Binding cekilensayi}" Width="90"/>
+                            <DataGridTextColumn Header="URL" Binding="{Binding url}" Width="*"/>
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="SİL" Command="{Binding DataContext.kaynakSilKomutu, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+                </GroupBox>
+            </Grid>
+        </TabItem>
+
+        <!-- AYARLAR -->
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE713;" Margin="0,0,10,0"/>
+                    <TextBlock Text="AYARLAR"/>
+                </StackPanel>
+            </TabItem.Header>
+            <StackPanel Margin="20" MaxWidth="600">
+                <TextBlock Text="AYARLAR" Style="{StaticResource H1}"/>
+                <GroupBox Header="GENEL" Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="Veritabanı: k7proxy.db (uygulama klasöründe)" Foreground="{StaticResource Sub}" Margin="0,0,0,8"/>
+                        <TextBlock Text="Tema: HeraProtector Monokrom (Derin Siyah + Parlayan Beyaz)" Foreground="{StaticResource Sub}" Margin="0,0,0,16"/>
+                        <Button Content="VERİTABANINI TEMİZLE" Command="{Binding temizleKomutu}" Width="220"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+        <Grid Grid.RowSpan="2" Background="#CC000000" Visibility="{Binding mesgul, Converter={StaticResource BoolGorunurluk}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid Width="60" Height="60">
+                    <Ellipse Stroke="#33FFFFFF" StrokeThickness="4" Width="60" Height="60"/>
+                    <Ellipse x:Name="Spinner" Stroke="#FFFFFF" StrokeThickness="4" Width="60" Height="60"
+                             StrokeDashArray="2 6" RenderTransformOrigin="0.5,0.5">
+                        <Ellipse.RenderTransform>
+                            <RotateTransform/>
+                        </Ellipse.RenderTransform>
+                        <Ellipse.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" From="0" To="360" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Ellipse.Triggers>
+                    </Ellipse>
+                </Grid>
+                <TextBlock Text="İŞLENİYOR..." Foreground="#FFFFFF" FontWeight="Bold" Margin="0,16,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
